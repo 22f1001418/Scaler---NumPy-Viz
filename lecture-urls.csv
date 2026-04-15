@@ -1,0 +1,4 @@
+lecture,title,subtitle,slug,path,topics
+1,Food Delivery EDA — I,"Arrays, dimensions & slicing",fd-k7q2x9m4,/v/fd-k7q2x9m4,slicing
+2,Food Delivery EDA — II,"Shape, stats & sorting",fd-r8w5n3p2,/v/fd-r8w5n3p2,"elementwise;reshape;aggregation;sorting"
+3,Food Delivery EDA — III,"Matrix multiply, broadcasting & splitting",fd-z1y6t8h5,/v/fd-z1y6t8h5,"matmul;broadcasting;stacking"
