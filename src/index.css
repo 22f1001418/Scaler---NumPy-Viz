@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===================================================================
+   DARK THEME — Scaler-branded, softened dark
+   =================================================================== */
+:root, .dark {
+  --s0: #0c0e1a; --s1: #141625; --s2: #1c1f30; --s3: #282c42; --s4: #363b55;
+  --t1: #eceef5; --t2: #9ea3b8; --t3: #656a82; --t-inv: #0c0e1a;
+  --border: #252840; --border-strong: #363b58;
+  --glow: rgba(75,131,255,0.35);
+  --panel-bg: rgba(20,22,37,0.8);
+  --panel-border: rgba(255,255,255,0.07);
+  --cell-base: #181b2a;
+  --cell-border: #282c42;
+  --accent: #4B83FF;
+  --accent-muted: rgba(75,131,255,0.12);
+  --scaler-blue: #4B83FF;
+  --scaler-pink: #E8468A;
+  color-scheme: dark;
+}
+
+/* ===================================================================
+   LIGHT THEME
+   =================================================================== */
+.light {
+  --s0: #f4f5f8; --s1: #ffffff; --s2: #eceef3; --s3: #dcdee6; --s4: #c5c8d4;
+  --t1: #0c0e1a; --t2: #4a4e66; --t3: #7f839a; --t-inv: #f4f5f8;
+  --border: #dcdee6; --border-strong: #c0c3d0;
+  --glow: rgba(0,65,202,0.25);
+  --panel-bg: rgba(255,255,255,0.85);
+  --panel-border: rgba(0,0,0,0.06);
+  --cell-base: #ffffff;
+  --cell-border: #dcdee6;
+  --accent: #0041CA;
+  --accent-muted: rgba(0,65,202,0.08);
+  --scaler-blue: #0041CA;
+  --scaler-pink: #B30158;
+  color-scheme: light;
+}
+
+/* ===================================================================
+   BASE RESETS
+   =================================================================== */
+* { box-sizing: border-box; margin: 0; }
+body {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  background: var(--s0);
+  color: var(--t1);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+#root { height: 100dvh; display: flex; }
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--s3); border-radius: 999px; }
+
+/* ===================================================================
+   GLASS PANELS
+   =================================================================== */
+.glass-panel {
+  background: var(--panel-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+}
+.dark .glass-panel { box-shadow: 0 4px 32px -4px rgba(0,0,0,0.4); }
+.light .glass-panel { box-shadow: 0 4px 24px -4px rgba(0,0,0,0.06); }
+
+/* ===================================================================
+   MESH BACKGROUND
+   =================================================================== */
+.mesh-bg { position: relative; }
+.mesh-bg::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+.dark .mesh-bg::before {
+  background:
+    radial-gradient(ellipse 70% 50% at 20% 10%, rgba(75,131,255,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 90%, rgba(232,70,138,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 50% 50%, rgba(129,140,248,0.03) 0%, transparent 50%);
+}
+.light .mesh-bg::before {
+  background:
+    radial-gradient(ellipse 70% 50% at 20% 10%, rgba(0,65,202,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 90%, rgba(179,1,88,0.04) 0%, transparent 60%);
+}
+.mesh-bg::after {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-size: 40px 40px;
+}
+.dark .mesh-bg::after {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+}
+.light .mesh-bg::after {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+}
+
+/* ===================================================================
+   CELL GLOW — Scaler palette: blue, pink, amber, emerald, indigo
+   =================================================================== */
+.cell-glow-blue    { --glow: rgba(75,131,255,0.5);  box-shadow: 0 0 14px 3px var(--glow), inset 0 0 6px rgba(75,131,255,0.1);   border-color: #4B83FF !important; }
+.cell-glow-pink    { --glow: rgba(232,70,138,0.5);  box-shadow: 0 0 14px 3px var(--glow), inset 0 0 6px rgba(232,70,138,0.1);   border-color: #E8468A !important; }
+.cell-glow-amber   { --glow: rgba(251,191,36,0.5);  box-shadow: 0 0 14px 3px var(--glow), inset 0 0 6px rgba(251,191,36,0.1);   border-color: #fbbf24 !important; }
+.cell-glow-emerald { --glow: rgba(52,211,153,0.5);  box-shadow: 0 0 14px 3px var(--glow), inset 0 0 6px rgba(52,211,153,0.1);   border-color: #34d399 !important; }
+.cell-glow-indigo  { --glow: rgba(129,140,248,0.5); box-shadow: 0 0 14px 3px var(--glow), inset 0 0 6px rgba(129,140,248,0.1);  border-color: #818CF8 !important; }
+
+.light .cell-glow-blue    { --glow: rgba(0,65,202,0.3);   border-color: #0041CA !important; box-shadow: 0 0 10px 2px var(--glow); }
+.light .cell-glow-pink    { --glow: rgba(179,1,88,0.3);   border-color: #B30158 !important; box-shadow: 0 0 10px 2px var(--glow); }
+.light .cell-glow-amber   { --glow: rgba(217,119,6,0.3);  border-color: #d97706 !important; box-shadow: 0 0 10px 2px var(--glow); }
+.light .cell-glow-emerald { --glow: rgba(5,150,105,0.3);  border-color: #059669 !important; box-shadow: 0 0 10px 2px var(--glow); }
+.light .cell-glow-indigo  { --glow: rgba(79,70,229,0.3);  border-color: #4F46E5 !important; box-shadow: 0 0 10px 2px var(--glow); }
+
+/* ===================================================================
+   HEATMAP CELL BACKGROUNDS
+   =================================================================== */
+.dark .cell-heat-blue-0 { background: #141625; } .dark .cell-heat-blue-1 { background: #152040; } .dark .cell-heat-blue-2 { background: #183060; } .dark .cell-heat-blue-3 { background: #1c4080; } .dark .cell-heat-blue-4 { background: #2050a0; }
+.dark .cell-heat-pink-0 { background: #141625; } .dark .cell-heat-pink-1 { background: #251530; } .dark .cell-heat-pink-2 { background: #3a1840; } .dark .cell-heat-pink-3 { background: #501c55; } .dark .cell-heat-pink-4 { background: #682070; }
+.dark .cell-heat-amber-0 { background: #141625; } .dark .cell-heat-amber-1 { background: #2a2515; } .dark .cell-heat-amber-2 { background: #453a1c; } .dark .cell-heat-amber-3 { background: #605025; } .dark .cell-heat-amber-4 { background: #80662e; }
+.dark .cell-heat-emerald-0 { background: #141625; } .dark .cell-heat-emerald-1 { background: #122a22; } .dark .cell-heat-emerald-2 { background: #154535; } .dark .cell-heat-emerald-3 { background: #186048; } .dark .cell-heat-emerald-4 { background: #1c805a; }
+.dark .cell-heat-indigo-0 { background: #141625; } .dark .cell-heat-indigo-1 { background: #1a1838; } .dark .cell-heat-indigo-2 { background: #222050; } .dark .cell-heat-indigo-3 { background: #2c2a70; } .dark .cell-heat-indigo-4 { background: #363590; }
+
+.light .cell-heat-blue-0 { background: #ffffff; } .light .cell-heat-blue-1 { background: #e6effd; } .light .cell-heat-blue-2 { background: #c8dbfc; } .light .cell-heat-blue-3 { background: #a0c0fa; } .light .cell-heat-blue-4 { background: #78a5f8; }
+.light .cell-heat-pink-0 { background: #ffffff; } .light .cell-heat-pink-1 { background: #fce8f0; } .light .cell-heat-pink-2 { background: #f8d0e0; } .light .cell-heat-pink-3 { background: #f0a8c5; } .light .cell-heat-pink-4 { background: #e880aa; }
+.light .cell-heat-amber-0 { background: #ffffff; } .light .cell-heat-amber-1 { background: #fef6e0; } .light .cell-heat-amber-2 { background: #fdecc0; } .light .cell-heat-amber-3 { background: #fbdd90; } .light .cell-heat-amber-4 { background: #f9ce60; }
+.light .cell-heat-emerald-0 { background: #ffffff; } .light .cell-heat-emerald-1 { background: #e6faf0; } .light .cell-heat-emerald-2 { background: #ccf5e1; } .light .cell-heat-emerald-3 { background: #a3ebc8; } .light .cell-heat-emerald-4 { background: #7ae0b0; }
+.light .cell-heat-indigo-0 { background: #ffffff; } .light .cell-heat-indigo-1 { background: #edeffe; } .light .cell-heat-indigo-2 { background: #dad8fd; } .light .cell-heat-indigo-3 { background: #c0bcfb; } .light .cell-heat-indigo-4 { background: #a5a0fa; }
+
+/* === Gradient text (Scaler branded) === */
+@layer utilities {
+  .text-grad-blue   { background: linear-gradient(135deg, #4B83FF, #0041CA); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .text-grad-pink   { background: linear-gradient(135deg, #E8468A, #B30158); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .text-grad-amber  { background: linear-gradient(135deg, #fbbf24, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .light .text-grad-blue   { background: linear-gradient(135deg, #0041CA, #002d8f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .light .text-grad-pink   { background: linear-gradient(135deg, #B30158, #8a0044); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .light .text-grad-amber  { background: linear-gradient(135deg, #d97706, #b45309); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+}
+
+/* === Accent text colors === */
+.accent-blue    { color: #4B83FF; } .light .accent-blue    { color: #0041CA; }
+.accent-pink    { color: #E8468A; } .light .accent-pink    { color: #B30158; }
+.accent-amber   { color: #fbbf24; } .light .accent-amber   { color: #d97706; }
+.accent-emerald { color: #34d399; } .light .accent-emerald { color: #059669; }
+.accent-indigo  { color: #818CF8; } .light .accent-indigo  { color: #4F46E5; }
+
+/* Accent backgrounds */
+.accent-bg-blue    { background: rgba(75,131,255,0.12); }  .light .accent-bg-blue    { background: rgba(0,65,202,0.08); }
+.accent-bg-pink    { background: rgba(232,70,138,0.12); }  .light .accent-bg-pink    { background: rgba(179,1,88,0.08); }
+.accent-bg-amber   { background: rgba(251,191,36,0.12); }  .light .accent-bg-amber   { background: rgba(217,119,6,0.08); }
+.accent-bg-emerald { background: rgba(52,211,153,0.12); }  .light .accent-bg-emerald { background: rgba(5,150,105,0.08); }
+.accent-bg-indigo  { background: rgba(129,140,248,0.12); } .light .accent-bg-indigo  { background: rgba(79,70,229,0.08); }
+
+/* Accent borders */
+.accent-border-blue    { border-color: rgba(75,131,255,0.3); }   .light .accent-border-blue    { border-color: rgba(0,65,202,0.25); }
+.accent-border-pink    { border-color: rgba(232,70,138,0.3); }   .light .accent-border-pink    { border-color: rgba(179,1,88,0.25); }
+.accent-border-amber   { border-color: rgba(251,191,36,0.3); }   .light .accent-border-amber   { border-color: rgba(217,119,6,0.25); }
+.accent-border-emerald { border-color: rgba(52,211,153,0.3); }   .light .accent-border-emerald { border-color: rgba(5,150,105,0.25); }
+.accent-border-indigo  { border-color: rgba(129,140,248,0.3); }  .light .accent-border-indigo  { border-color: rgba(79,70,229,0.25); }
