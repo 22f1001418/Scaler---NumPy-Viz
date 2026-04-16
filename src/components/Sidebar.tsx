@@ -1,14 +1,28 @@
 import { motion } from "framer-motion";
 import { Sun, Moon, PanelLeftClose, PanelLeft, Box } from "lucide-react";
-import { useStore, NAV_ITEMS, CATEGORIES } from "../store/useStore";
+import { useNavigate } from "react-router-dom";
+import { useStore, NAV_ITEMS } from "../store/useStore";
+import type { PageId } from "../store/useStore";
+import type { LectureConfig } from "../lectures";
 import NavIcon from "./NavIcon";
 
-export default function Sidebar() {
-  const { page, setPage, theme, toggleTheme, sidebarOpen, toggleSidebar } = useStore();
+interface Props {
+  lecture: LectureConfig;
+  activeTopic: PageId;
+}
+
+export default function Sidebar({ lecture, activeTopic }: Props) {
+  const { theme, toggleTheme, sidebarOpen, toggleSidebar } = useStore();
+  const navigate = useNavigate();
+
+  const items = lecture.topics
+    .map((id) => NAV_ITEMS.find((n) => n.id === id))
+    .filter((n): n is NonNullable<typeof n> => Boolean(n));
+
+  const go = (id: PageId) => navigate(`/v/${lecture.slug}/${id}`);
 
   return (
     <>
-      {/* Collapsed: floating open button */}
       {!sidebarOpen && (
         <motion.button initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
           onClick={toggleSidebar}
@@ -25,9 +39,8 @@ export default function Sidebar() {
         style={{ background: "var(--s1)" }}
       >
         <div className="min-w-[270px] flex flex-col h-full">
-          {/* Header */}
           <div className="flex items-center justify-between px-4 pt-5 pb-3">
-            <button className="flex items-center gap-2.5" onClick={() => setPage("home")}>
+            <button className="flex items-center gap-2.5 text-left" onClick={() => navigate("/")}>
               <Box size={20} className="accent-blue" />
               <div>
                 <div className="font-bold text-sm text-grad-blue leading-tight">NumPy Visualizer</div>
@@ -44,57 +57,55 @@ export default function Sidebar() {
 
           <div className="h-px bg-edge mx-4" />
 
-          {/* Categorized nav */}
+          <div className="px-4 pt-3 pb-1">
+            <div className="text-[9px] uppercase tracking-[0.15em] text-txt-muted font-bold">Lecture</div>
+            <div className="text-[13px] font-semibold text-txt-primary mt-0.5">{lecture.title}</div>
+            <div className="text-[10px] text-txt-muted leading-tight mt-0.5">{lecture.subtitle}</div>
+          </div>
+
           <nav className="flex-1 overflow-y-auto px-3 py-3">
-            {CATEGORIES.map((cat) => {
-              const items = NAV_ITEMS.filter((n) => n.category === cat.key);
-              return (
-                <div key={cat.key} className="mb-3">
-                  <div className="text-[9px] uppercase tracking-[0.15em] text-txt-muted font-bold px-2 mb-1.5">
-                    {cat.label}
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    {items.map((item) => {
-                      const active = page === item.id;
-                      return (
-                        <motion.button
-                          key={item.id}
-                          whileHover={{ x: 2 }} whileTap={{ scale: 0.98 }}
-                          onClick={() => setPage(item.id)}
-                          className={`
-                            flex items-center gap-3 px-3 py-2.5 rounded-xl text-left w-full transition-all duration-150
-                            ${active
-                              ? `accent-bg-${item.accent} border border-transparent`
-                              : "border border-transparent hover:bg-surface-2"
-                            }
-                          `}
-                        >
-                          <span className={`shrink-0 ${active ? `accent-${item.accent}` : "text-txt-muted"}`}>
-                            <NavIcon iconKey={item.iconKey} size={16} />
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <div className={`text-[13px] font-semibold truncate ${active ? `accent-${item.accent}` : "text-txt-secondary"}`}>
-                              {item.label}
-                            </div>
-                            <div className="text-[10px] text-txt-muted truncate leading-tight mt-0.5">
-                              {item.desc}
-                            </div>
-                          </div>
-                          {active && (
-                            <motion.div
-                              layoutId="nav-dot"
-                              className={`w-1.5 h-1.5 rounded-full shrink-0 accent-${item.accent}`}
-                              style={{ backgroundColor: "currentColor" }}
-                              transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                            />
-                          )}
-                        </motion.button>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
+            <div className="text-[9px] uppercase tracking-[0.15em] text-txt-muted font-bold px-2 mb-1.5">
+              Topics in this lecture
+            </div>
+            <div className="flex flex-col gap-0.5">
+              {items.map((item) => {
+                const active = activeTopic === item.id;
+                return (
+                  <motion.button
+                    key={item.id}
+                    whileHover={{ x: 2 }} whileTap={{ scale: 0.98 }}
+                    onClick={() => go(item.id)}
+                    className={`
+                      flex items-center gap-3 px-3 py-2.5 rounded-xl text-left w-full transition-all duration-150
+                      ${active
+                        ? `accent-bg-${item.accent} border border-transparent`
+                        : "border border-transparent hover:bg-surface-2"
+                      }
+                    `}
+                  >
+                    <span className={`shrink-0 ${active ? `accent-${item.accent}` : "text-txt-muted"}`}>
+                      <NavIcon iconKey={item.iconKey} size={16} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className={`text-[13px] font-semibold truncate ${active ? `accent-${item.accent}` : "text-txt-secondary"}`}>
+                        {item.label}
+                      </div>
+                      <div className="text-[10px] text-txt-muted truncate leading-tight mt-0.5">
+                        {item.desc}
+                      </div>
+                    </div>
+                    {active && (
+                      <motion.div
+                        layoutId="nav-dot"
+                        className={`w-1.5 h-1.5 rounded-full shrink-0 accent-${item.accent}`}
+                        style={{ backgroundColor: "currentColor" }}
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      />
+                    )}
+                  </motion.button>
+                );
+              })}
+            </div>
           </nav>
         </div>
       </motion.aside>

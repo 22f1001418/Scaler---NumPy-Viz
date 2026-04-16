@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export type PageId =
-  | "home" | "elementwise" | "matmul" | "reshape"
+  | "elementwise" | "matmul" | "reshape"
   | "broadcasting" | "slicing" | "aggregation"
   | "stacking" | "sorting" | "cumulative";
 
@@ -39,20 +39,20 @@ export const CATEGORIES: { key: string; label: string }[] = [
   { key: "analysis", label: "Analysis & Stats" },
 ];
 
+export function getNavItem(id: PageId): NavItem | undefined {
+  return NAV_ITEMS.find((n) => n.id === id);
+}
+
 interface AppState {
-  page: PageId;
   theme: "dark" | "light";
   sidebarOpen: boolean;
-  setPage: (p: PageId) => void;
   toggleTheme: () => void;
   toggleSidebar: () => void;
 }
 
 export const useStore = create<AppState>((set) => ({
-  page: "home",
   theme: "dark",
   sidebarOpen: true,
-  setPage: (p) => set({ page: p }),
   toggleTheme: () =>
     set((s) => {
       const next = s.theme === "dark" ? "light" : "dark";
